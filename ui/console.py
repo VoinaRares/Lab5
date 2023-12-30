@@ -34,6 +34,19 @@ def new_customer():
     return new_cust
 
 
+def new_dish():
+    print(" Choose which Dish type to add: \n 1 - Cooked Dish \n 2 - Beverage")
+    dish_type = int(input("Choose the dish type to add: "))
+    portion_size = input("Enter the portion size: ")
+    price = int(input("Enter the price: "))
+    if dish_type == 1:
+        time_needed = int(input("Enter the time needed: "))
+        return CookedDish(portion_size, price, time_needed)
+    if dish_type == 2:
+        alcohol_percentage = int(input("Enter the alcohol percentage: "))
+        return Beverage(portion_size, price, alcohol_percentage)
+
+
 class Console:
     def __init__(self, customer_controller, cooked_dish_controller, beverage_controller,
                  order_controller):
@@ -74,11 +87,82 @@ class Console:
             customer_id = int(input("Choose the customer by ID: "))
             self.customer_controller.delete_item(customer_id)
 
+    def crud_dishes(self, opt):
+        if opt == 1:
+            dish = new_dish()
+            if type(dish) is CookedDish:
+                self.cooked_dish_controller.add_item(dish)
+            if type(dish) is Beverage:
+                self.beverage_controller.add_item(dish)
+        if opt == 2:
+            print("Cooked Dishes: \n")
+            print(self.cooked_dish_controller.view_items())
+            print("Beverages: \n")
+            print(self.beverage_controller.view_items())
+        if opt == 3:
+            print("What do you want to edit: \n1 - Cooked Dishes\n2 - Beverages")
+            dish_option = int(input("Choose the option: "))
+            if dish_option == 1:
+                print(self.cooked_dish_controller.view_items())
+                cooked_dish_id = input("Choose the dish Id: ")
+                cooked_dish = self.cooked_dish_controller.find_by_id(cooked_dish_id)
+                while True:
+                    print("What do you want to edit?\n1 - Portion Size\n2 - Price\n3 - Time Needed\n0 - Stop")
+                    edit_option = int(input("Choose the option: "))
+                    if edit_option == 1:
+                        portion_size = input("Portion Size: ")
+                        cooked_dish.portion_size = portion_size
+                    if edit_option == 2:
+                        price = input("Price: ")
+                        cooked_dish.price = price
+                    if edit_option == 3:
+                        time_needed = input("Time Needed: ")
+                        cooked_dish.time_needed = time_needed
+                    if edit_option == 0:
+                        break
+                    self.cooked_dish_controller.edit_cooked_dish(cooked_dish.id, cooked_dish.portion_size,
+                                                                 cooked_dish.price, cooked_dish.time_needed)
+            if dish_option == 2:
+                print(self.beverage_controller.view_items())
+                beverage_id = input("Choose the beverage Id: ")
+                beverage = self.beverage_controller.find_by_id(beverage_id)
+                while True:
+                    print("What do you want to edit?\n1 - Portion Size\n2 - Price\n3 - Alcohol Percentage\n0 - Stop")
+                    edit_option = int(input("Choose the option: "))
+                    if edit_option == 1:
+                        portion_size = input("Portion Size: ")
+                        beverage.portion_size = portion_size
+                    if edit_option == 2:
+                        price = input("Price: ")
+                        beverage.price = price
+                    if edit_option == 3:
+                        alcohol_percentage = input("Alcohol Percentage: ")
+                        beverage.alcohol_percentage = alcohol_percentage
+                    if edit_option == 0:
+                        break
+                    self.beverage_controller.edit_beverage(beverage.id, beverage.portion_size,
+                                                           beverage.price, beverage.alcohol_percentage)
+        if opt == 4:
+            print("Cooked Dishes: \n")
+            print(self.cooked_dish_controller.view_items())
+            print("Beverages: \n")
+            print(self.beverage_controller.view_items())
+            print("What do you want to delete?\n1 - Cooked Dish\n2 - Beverage")
+            delete_option = int(input("Choose the option: "))
+            if delete_option == 1:
+                dish_id = int(input("Choose the Cooked Dish by ID: "))
+                self.cooked_dish_controller.delete_item(dish_id)
+            if delete_option == 2:
+                dish_id = int(input("Choose the Beverage by ID: "))
+                self.beverage_controller.delete_item(dish_id)
+
     def crud_operations(self, class_option):
         print(crud())
         opt = int(input("Choose which: "))
         if class_option == 7:
             self.crud_customer(opt)
+        if class_option == 8:
+            self.crud_dishes(opt)
 
     def edit_order(self):
         print(self.view_orders())
@@ -128,7 +212,7 @@ class Console:
                 if beverage_id == -1:
                     break
                 else:
-                    beverage_ids.append(beverage_id)            # Check if the id exists
+                    beverage_ids.append(beverage_id)  # Check if the id exists
                     print("Beverage was added to the order")
             except ValueError:
                 print("Invalid Value")
@@ -167,7 +251,7 @@ class Console:
     def view_orders(self):
         return self.order_controller.view_items()
 
-    def add_dish_console(self):     # restructurare
+    def add_dish_console(self):
         print("1 - Cooked Dish\n2 - Beverage")
         while True:
             try:
@@ -222,4 +306,4 @@ class Console:
             if opt == 7:
                 self.crud_operations(opt)
             if opt == 8:
-                pass
+                self.crud_operations(opt)

@@ -18,7 +18,7 @@ class Controller:
         items = self.repo.read()
         # return filter(lambda item: item_id == item.id, items)
         for item in items:
-            if item.id == item_id:
+            if int(item.id) == int(item_id):
                 return item
 
     def delete_item(self, item_id):
@@ -29,3 +29,9 @@ class Controller:
 
     def edit_customer(self, customer_id, name, address):
         self.repo.edit_customer(customer_id, name, address)
+
+    def edit_cooked_dish(self, cooked_dish_id, portion_size, price, time_needed):
+        self.repo.edit_cooked_dish(cooked_dish_id, portion_size, price, time_needed)
+
+    def edit_beverage(self, beverage_id, portion_size, price, alcohol_percentage):
+        self.repo.edit_beverage(beverage_id, portion_size, price, alcohol_percentage)

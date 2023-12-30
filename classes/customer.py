@@ -15,6 +15,6 @@ class Customer(Identifier):
             self.id = 0
 
     def __str__(self):
-        return f'{self.id} {self.name} - {self.address}'
+        return f'{self.id} {self.name} - {self.address}\n'
 
     __repr__ = __str__

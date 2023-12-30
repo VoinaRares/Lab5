@@ -26,3 +26,6 @@ class Controller:
 
     def edit_order(self, item_id, customer_id, dish_ids, beverage_ids):
         self.repo.edit_order(item_id, customer_id, dish_ids, beverage_ids)
+
+    def edit_customer(self, customer_id, name, address):
+        self.repo.edit_customer(customer_id, name, address)

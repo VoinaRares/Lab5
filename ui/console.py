@@ -18,9 +18,25 @@ def menu():
             """
 
 
+def crud():
+    return """
+            1 - Add
+            2 - View
+            3 - Edit
+            4 - Delete
+           """
+
+
+def new_customer():
+    name = input("Name: ")
+    address = input("Address: ")
+    new_cust = Customer(name, address)
+    return new_cust
+
+
 class Console:
-    def __init__(self, customer_controller, cooked_dish_controller=None, beverage_controller=None,
-                 order_controller=None):
+    def __init__(self, customer_controller, cooked_dish_controller, beverage_controller,
+                 order_controller):
         self.customer_controller = customer_controller
         self.cooked_dish_controller = cooked_dish_controller
         self.beverage_controller = beverage_controller
@@ -30,6 +46,39 @@ class Console:
         print(self.view_orders())
         order_id = int(input("Choose which order to delete by ID: "))
         self.order_controller.delete_item(order_id)
+
+    def crud_customer(self, opt):
+        if opt == 1:
+            customer = new_customer()
+            self.customer_controller.add_item(customer)
+        if opt == 2:
+            print(self.customer_controller.view_items())
+        if opt == 3:
+            self.find_customer()
+            customer_id = int(input("Choose the customer by ID: "))
+            customer = self.customer_controller.find_by_id(customer_id)
+            while True:
+                print("What do you want to edit?\n1-Name\n2-Address\n0-Stop")
+                edit_option = int(input("Choose the option: "))
+                if edit_option == 1:
+                    name = input("Name: ")
+                    customer.name = name
+                if edit_option == 2:
+                    address = input("Address: ")
+                    customer.address = address
+                if edit_option == 0:
+                    break
+            self.customer_controller.edit_customer(customer.id, customer.name, customer.address)
+        if opt == 4:
+            self.find_customer()
+            customer_id = int(input("Choose the customer by ID: "))
+            self.customer_controller.delete_item(customer_id)
+
+    def crud_operations(self, class_option):
+        print(crud())
+        opt = int(input("Choose which: "))
+        if class_option == 7:
+            self.crud_customer(opt)
 
     def edit_order(self):
         print(self.view_orders())
@@ -100,11 +149,9 @@ class Console:
                 2 - No
                 Please enter your choice: """))
         if opt == 1:
-            name = input("Name: ")
-            address = input("Address: ")
-            new_customer = Customer(name, address)
-            customer_id = new_customer.id
-            self.customer_controller.add_item(new_customer)
+            customer = new_customer()
+            self.customer_controller.add_item(customer)
+            customer_id = customer.id
         elif opt == 2:
             self.find_customer()
             customer_id = input("Customer ID: ")
@@ -158,10 +205,8 @@ class Console:
                     break
                 except ValueError:
                     print("Invalid Value! Please pick a number")
-
             if opt == 0:
                 break
-
             if opt == 1:
                 self.order_controller.add_item(self.add_order_console())
             if opt == 2:
@@ -175,6 +220,6 @@ class Console:
             if opt == 6:
                 self.add_dish_console()
             if opt == 7:
-                pass
+                self.crud_operations(opt)
             if opt == 8:
                 pass

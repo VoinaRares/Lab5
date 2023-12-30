@@ -1,6 +1,8 @@
 from classes.identifier import Identifier
 from repository.cooked_dish_repo import CookedDishRepo
 from repository.beverage_repo import BeverageRepo
+from repository.order_repo import OrderRepo
+import functools
 
 
 class Order(Identifier):
@@ -12,12 +14,25 @@ class Order(Identifier):
         self.beverage_ids = beverage_ids
         self.price = 0
         self.calculate_price()
+        order_repo = OrderRepo('order.txt')
+        try:
+            self.id = max(order_repo.read()).id + 1
+        except:
+            self.id = 0
 
     def calculate_price(self):
         cooked_dish_repo = CookedDishRepo('cooked_dish.txt')
         beverage_repo = BeverageRepo('beverage.txt')
+        dishes = []
         for dish_id in self.dish_ids:
-            pass
+            for dish in cooked_dish_repo.load():
+                if dish.id == dish_id:
+                    dishes.append(dish.price)
+        for beverage_id in self.beverage_ids:
+            for beverage in beverage_repo.load():
+                if beverage.id == beverage_id:
+                    dishes.append(beverage.price)
+        self.price = functools.reduce(lambda a, b: a + b, dishes)
 
     def __create_receipt(self):
         pass

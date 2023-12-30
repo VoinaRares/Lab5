@@ -17,7 +17,4 @@ class Customer(Identifier):
     def __str__(self):
         return f'{self.id} {self.name} - {self.address}'
 
-    def __lt__(self, other):
-        return self.id < other.id
-
     __repr__ = __str__

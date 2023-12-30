@@ -12,6 +12,8 @@ def menu():
             4 - Delete Order
             5 - Search Clients
             6 - Add Dish
+            7 - CRUD Customer
+            8 - CRUD Dish
             0 - Stop
             """
 
@@ -24,25 +26,35 @@ class Console:
         self.beverage_controller = beverage_controller
         self.order_controller = order_controller
 
-    def add_order_console(self):
+    def delete_order(self):
+        print(self.view_orders())
+        order_id = int(input("Choose which order to delete by ID: "))
+        self.order_controller.delete_item(order_id)
 
-        customer_id = 0
-        opt = int(input("""Is the customer new?
-        1 - Yes
-        2 - No
-        Please enter your choice: """))
-        if opt == 1:
-            name = input("Name: ")
-            address = input("Address: ")
-            new_customer = Customer(name, address)
-            customer_id = new_customer.id
-            self.customer_controller.add_item(new_customer)
-        elif opt == 2:
-            print("Search for the new customer: ")
-            customer_id = int(input("Enter customer id: "))
+    def edit_order(self):
+        print(self.view_orders())
+        order_id = int(input("Choose which order to edit by ID: "))
+        order = self.order_controller.find_by_id(order_id)
+        while True:
+            print("1 - Edit cooked dishes\n2 - Edit beverages\n3 - Edit customer\n0 - Stop")
+            option = int(input("Please choose: "))
+            if option == 1:
+                dish_ids = self.dish_ids_to_list()
+                order.dish_ids = dish_ids
+            if option == 2:
+                beverage_ids = self.beverage_ids_to_list()
+                order.beverage_ids = beverage_ids
+            if option == 3:
+                self.find_customer()
+                customer_id = int(input("Choose new customer by ID: "))
+                order.customer_id = customer_id
+            if option == 0:
+                break
+        self.order_controller.edit_order(order.id, order.customer_id, order.dish_ids, order.beverage_ids)
+        print("The order has been edited", order)
 
+    def dish_ids_to_list(self):
         dish_ids = []
-        beverage_ids = []
         while True:
             print(self.cooked_dish_controller.view_items())
             print("-1 - Stop adding Dishes")
@@ -55,7 +67,10 @@ class Console:
                     print("Dish was added to the order")
             except ValueError:
                 print("Invalid Value")
+        return dish_ids
 
+    def beverage_ids_to_list(self):
+        beverage_ids = []
         while True:
             print(self.beverage_controller.view_items())
             print("-1 - Stop adding Beverages")
@@ -64,16 +79,48 @@ class Console:
                 if beverage_id == -1:
                     break
                 else:
-                    beverage_ids.append(beverage_id)
+                    beverage_ids.append(beverage_id)            # Check if the id exists
                     print("Beverage was added to the order")
             except ValueError:
                 print("Invalid Value")
+        return beverage_ids
+
+    def find_customer(self):
+        print("Search for the new customer: ")
+        search_term = input("Search: ")
+        possible_terms = self.customer_controller.find_items(search_term)
+        print("Our current customers are: \n")
+        for term in possible_terms:
+            print(term.id, term.name, term.address)
+
+    def customer_id_for_order(self):
+        customer_id = 0
+        opt = int(input("""Is the customer new?
+                1 - Yes
+                2 - No
+                Please enter your choice: """))
+        if opt == 1:
+            name = input("Name: ")
+            address = input("Address: ")
+            new_customer = Customer(name, address)
+            customer_id = new_customer.id
+            self.customer_controller.add_item(new_customer)
+        elif opt == 2:
+            self.find_customer()
+            customer_id = input("Customer ID: ")
+        return customer_id
+
+    def add_order_console(self):
+
+        customer_id = self.customer_id_for_order()
+        dish_ids = self.dish_ids_to_list()
+        beverage_ids = self.beverage_ids_to_list()
         return Order(customer_id, dish_ids, beverage_ids)
 
     def view_orders(self):
         return self.order_controller.view_items()
 
-    def add_dish_console(self):
+    def add_dish_console(self):     # restructurare
         print("1 - Cooked Dish\n2 - Beverage")
         while True:
             try:
@@ -119,15 +166,15 @@ class Console:
                 self.order_controller.add_item(self.add_order_console())
             if opt == 2:
                 print(self.view_orders())
-
             if opt == 3:
-                pass
-
+                self.edit_order()
             if opt == 4:
-                pass
-
+                self.delete_order()
             if opt == 5:
-                pass
-
+                self.find_customer()
             if opt == 6:
                 self.add_dish_console()
+            if opt == 7:
+                pass
+            if opt == 8:
+                pass

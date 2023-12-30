@@ -29,6 +29,11 @@ class DataRepo:
 
     def add_item(self, item):
         self.items.append(item)
-        f = open(self.filename, 'wb')
-        pickle.dump(self.items, f)
+        self.save()
+
+    def delete_item(self, item_id):
+        f = open(self.filename, 'rb')
+        self.items = pickle.load(f)
         f.close()
+        self.items = list(filter(lambda item: item.id != item_id, self.items))
+        self.save()

@@ -20,25 +20,27 @@ class Order(Identifier):
         except:
             self.id = 0
 
-    def calculate_price(self):
+    def __dishes_list(self):
         cooked_dish_repo = CookedDishRepo('cooked_dish.txt')
         beverage_repo = BeverageRepo('beverage.txt')
-        dishes = []
-        for dish_id in self.dish_ids:
-            for dish in cooked_dish_repo.load():
-                if dish.id == dish_id:
-                    dishes.append(dish.price)
-        for beverage_id in self.beverage_ids:
-            for beverage in beverage_repo.load():
-                if beverage.id == beverage_id:
-                    dishes.append(beverage.price)
-        self.price = functools.reduce(lambda a, b: a + b, dishes)
+        dishes = ([dish.price for dish_id in self.dish_ids for dish in cooked_dish_repo.load() if dish.id == dish_id] +
+                  [beverage.price for beverage_id in self.beverage_ids for beverage in beverage_repo.load()
+                   if beverage_id == beverage.id])
+        return dishes
+
+    def calculate_price(self):
+        dishes = self.__dishes_list()
+        self.price = functools.reduce(lambda a, b: float(a) + float(b), dishes)
 
     def __create_receipt(self):
-        pass
+        dishes = self.__dishes_list()
+        indexes = [x for x in range(len(dishes))]
+        receipt = map(lambda a, b: f"The {b}. item                  {a} Ron", dishes, indexes)
+        receipt = '\n'.join(list(receipt))
+        return receipt + f"\nThe total of the order is    {self.price} Ron"
 
     def show_receipt(self):
-        pass
+        print(self.__create_receipt())
 
     def __str__(self):
         return (f"Order {self.id}: Customer Id: {self.customer_id}, Dish Ids: {self.dish_ids} , Beverage Ids:"

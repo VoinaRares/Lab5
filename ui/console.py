@@ -14,6 +14,7 @@ def menu():
             6 - Add Dish
             7 - CRUD Customer
             8 - CRUD Dish
+            9 - Show Receipt for Order
             0 - Stop
             """
 
@@ -280,6 +281,13 @@ class Console:
                 except ValueError:
                     print("Invalid Value")
 
+    def show_receipt(self):
+        print(self.view_orders())
+        print("Enter the Id of the Order you want to see the receipt for: ")
+        order_id = int(input("Enter the ID: "))
+        order = self.order_controller.find_by_id(order_id)
+        order.show_receipt()
+
     def run(self):
         while True:
             print(menu())
@@ -307,3 +315,5 @@ class Console:
                 self.crud_operations(opt)
             if opt == 8:
                 self.crud_operations(opt)
+            if opt == 9:
+                self.show_receipt()

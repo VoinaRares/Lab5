@@ -286,7 +286,7 @@ class Console:
         print("Enter the Id of the Order you want to see the receipt for: ")
         order_id = int(input("Enter the ID: "))
         order = self.order_controller.find_by_id(order_id)
-        order.show_receipt()
+        print(order.show_receipt())
 
     def run(self):
         while True:

@@ -3,7 +3,7 @@ from repository.beverage_repo import BeverageRepo
 
 class Beverage(Dish):
 
-    def __init__(self, portion_size: str, price: int, alcohol_percentage: float):
+    def __init__(self, portion_size: str, price: float, alcohol_percentage: float):
         super().__init__(portion_size, price)
         self.alcohol_percentage = alcohol_percentage
         br = BeverageRepo('beverage.txt')

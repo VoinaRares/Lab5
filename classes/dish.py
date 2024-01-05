@@ -3,7 +3,7 @@ from classes.identifier import Identifier
 
 class Dish(Identifier):
 
-    def __init__(self, portion_size: str, price: int):
+    def __init__(self, portion_size: str, price: float):
         super().__init__()
         self.portion_size = portion_size
         self.price = price

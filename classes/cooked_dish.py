@@ -4,7 +4,7 @@ from repository.cooked_dish_repo import CookedDishRepo
 
 class CookedDish(Dish):
 
-    def __init__(self, portion_size: str, price: int, time_needed: int):
+    def __init__(self, portion_size: str, price: float, time_needed: int):
         super().__init__(portion_size, price)
         self.time_needed = time_needed
         cdr = CookedDishRepo('cooked_dish.txt')

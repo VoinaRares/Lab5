@@ -40,7 +40,7 @@ class Order(Identifier):
         return receipt + f"\nThe total of the order is    {self.price} Ron"
 
     def show_receipt(self):
-        print(self.__create_receipt())
+        return self.__create_receipt()
 
     def __str__(self):
         return (f"Order {self.id}: Customer Id: {self.customer_id}, Dish Ids: {self.dish_ids} , Beverage Ids:"

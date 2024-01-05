@@ -1,14 +1,19 @@
 from ui.console import Console
-from controller.controller import Controller
+from controller.customer_controller import CustomerController
+from controller.cooked_dish_controller import CookedDishController
+from controller.beverage_controller import BeverageController
+from controller.order_controller import OrderController
 from repository.customer_repo import CustomerRepository
 from repository.order_repo import OrderRepo
 from repository.cooked_dish_repo import CookedDishRepo
 from repository.beverage_repo import BeverageRepo
-from tests.tests import test_adding_dish, test_finding_customer, test_edit_customer_name, test_receipt, test_convert_and_save
+from tests.tests import (test_adding_dish, test_finding_customer, test_edit_customer_name, test_receipt,
+                         test_convert_and_save)
 from classes.customer import Customer
 
-app = Console(Controller(CustomerRepository('customer.txt')), Controller(CookedDishRepo('cooked_dish.txt')),
-              Controller(BeverageRepo('beverage.txt')), Controller(OrderRepo("order.txt")))
+app = Console(CustomerController(CustomerRepository('customer.txt')),
+              CookedDishController(CookedDishRepo('cooked_dish.txt')),
+              BeverageController(BeverageRepo('beverage.txt')), OrderController(OrderRepo("order.txt")))
 
 
 def tests():

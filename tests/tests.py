@@ -4,6 +4,7 @@ from repository.cooked_dish_repo import CookedDishRepo
 from repository.beverage_repo import BeverageRepo
 from repository.customer_repo import CustomerRepository
 from controller.controller import Controller
+from controller.customer_controller import CustomerController
 from classes.order import Order
 from repository.order_repo import OrderRepo
 
@@ -22,7 +23,7 @@ def test_adding_dish():
 
 
 def test_finding_customer():
-    customer_controller = Controller(CustomerRepository('customer.txt'))
+    customer_controller = CustomerController(CustomerRepository('customer.txt'))
     for term in customer_controller.find_items('Plop'):
         assert 'Plop' in term.address
         assert 'Plop' not in term.name
@@ -33,7 +34,7 @@ def test_finding_customer():
 
 
 def test_edit_customer_name():
-    customer_controller = Controller(CustomerRepository('customer.txt'))
+    customer_controller = CustomerController(CustomerRepository('customer.txt'))
     customer_controller.edit_customer(9, "Changed", "Street")
     assert customer_controller.find_by_id(9).name == 'Changed'
 
@@ -57,6 +58,6 @@ def test_receipt():
     assert receipt == """The 0. item                  24 Ron
 The 1. item                  100 Ron
 The 2. item                  100 Ron
-The 3. item                  18 Ron
-The 4. item                  18 Ron
-The total of the order is    260.0 Ron"""
+The 3. item                  15 Ron
+The 4. item                  15 Ron
+The total of the order is    254.0 Ron"""

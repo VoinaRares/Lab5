@@ -87,6 +87,7 @@ class Console:
             self.find_customer()
             customer_id = int(input("Choose the customer by ID: "))
             self.customer_controller.delete_item(customer_id)
+            self.order_controller.validate_customer_id(customer_id)
 
     def crud_dishes(self, opt):
         if opt == 1:
@@ -121,8 +122,9 @@ class Console:
                         cooked_dish.time_needed = time_needed
                     if edit_option == 0:
                         break
-                    self.cooked_dish_controller.edit_cooked_dish(cooked_dish.id, cooked_dish.portion_size,
-                                                                 cooked_dish.price, cooked_dish.time_needed)
+                self.cooked_dish_controller.edit_cooked_dish(cooked_dish.id, cooked_dish.portion_size,
+                                                             cooked_dish.price, cooked_dish.time_needed)
+
             if dish_option == 2:
                 print(self.beverage_controller.view_items())
                 beverage_id = input("Choose the beverage Id: ")
@@ -141,8 +143,9 @@ class Console:
                         beverage.alcohol_percentage = alcohol_percentage
                     if edit_option == 0:
                         break
-                    self.beverage_controller.edit_beverage(beverage.id, beverage.portion_size,
-                                                           beverage.price, beverage.alcohol_percentage)
+                self.beverage_controller.edit_beverage(beverage.id, beverage.portion_size,
+                                                       beverage.price, beverage.alcohol_percentage)
+            self.order_controller.recalculate_price()
         if opt == 4:
             print("Cooked Dishes: \n")
             print(self.cooked_dish_controller.view_items())
@@ -153,9 +156,12 @@ class Console:
             if delete_option == 1:
                 dish_id = int(input("Choose the Cooked Dish by ID: "))
                 self.cooked_dish_controller.delete_item(dish_id)
+                self.order_controller.validate_dish_id(dish_id, delete_option)
             if delete_option == 2:
                 dish_id = int(input("Choose the Beverage by ID: "))
                 self.beverage_controller.delete_item(dish_id)
+                self.order_controller.validate_dish_id(dish_id, delete_option)
+            self.order_controller.recalculate_price()
 
     def crud_operations(self, class_option):
         print(crud())
@@ -185,6 +191,8 @@ class Console:
             if option == 0:
                 break
         self.order_controller.edit_order(order.id, order.customer_id, order.dish_ids, order.beverage_ids)
+        self.order_controller.recalculate_price()
+        order.calculate_price()
         print("The order has been edited", order)
 
     def dish_ids_to_list(self):

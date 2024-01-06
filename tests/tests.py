@@ -3,13 +3,16 @@ from classes.beverage import Beverage
 from repository.cooked_dish_repo import CookedDishRepo
 from repository.beverage_repo import BeverageRepo
 from repository.customer_repo import CustomerRepository
-from controller.controller import Controller
 from controller.customer_controller import CustomerController
 from classes.order import Order
 from repository.order_repo import OrderRepo
 
 
 def test_adding_dish():
+    """
+    Test adding Cooked Dishes and Beverages
+    :return:
+    """
     cooked_dish_repo = CookedDishRepo('cooked_dish.txt')
     beverage_repo = BeverageRepo('beverage.txt')
     cooked_dish_repo.add_item(CookedDish('230g', 123, 120))
@@ -23,6 +26,10 @@ def test_adding_dish():
 
 
 def test_finding_customer():
+    """
+    Test the finding a customer by partial name or partial address
+    :return:
+    """
     customer_controller = CustomerController(CustomerRepository('customer.txt'))
     for term in customer_controller.find_items('Plop'):
         assert 'Plop' in term.address
@@ -34,12 +41,22 @@ def test_finding_customer():
 
 
 def test_edit_customer_name():
+    """
+    Test the editing the customer name
+    :return:
+    """
     customer_controller = CustomerController(CustomerRepository('customer.txt'))
     customer_controller.edit_customer(9, "Changed", "Street")
     assert customer_controller.find_by_id(9).name == 'Changed'
 
 
 def test_convert_and_save():
+    """
+    Creates an order and converts it into a string that represents a byte of an order.
+    That string is then saved onto a file and then retrieved from the file
+    The string is then converted into a byte again and used to retrieve the order that was originally saved
+    :return:
+    """
     order_repo = OrderRepo('order_file.txt')
     obj_list_string = order_repo.convert_to_string([Order(3, [1, 1, 0], [2, 3, 2]), Order(4, [3, 2, 1], [])])
     for obj in obj_list_string:

@@ -1,7 +1,7 @@
 from classes.identifier import Identifier
 
 
-class Dish(Identifier):
+class Dish(Identifier):         # Base class for the Cooked Dish and the Beverage classes
 
     def __init__(self, portion_size: str, price: float):
         super().__init__()

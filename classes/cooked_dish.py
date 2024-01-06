@@ -8,7 +8,7 @@ class CookedDish(Dish):
         super().__init__(portion_size, price)
         self.time_needed = time_needed
         cdr = CookedDishRepo('cooked_dish.txt')
-        try:
+        try:        # tries to make sure that the id doesn't repeat by checking the files that are already saved
             self.id = max(cdr.read()).id + 1
         except:
             self.id = 0

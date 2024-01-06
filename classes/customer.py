@@ -9,7 +9,7 @@ class Customer(Identifier):
         self.name = name
         self.address = address
         cr = CustomerRepository('customer.txt')
-        try:
+        try:        # tries to make sure that the id doesn't repeat by checking the files that are already saved
             self.id = max(cr.read()).id + 1
         except:
             self.id = 0

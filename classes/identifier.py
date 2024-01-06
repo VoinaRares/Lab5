@@ -1,4 +1,4 @@
-class Identifier:
+class Identifier:       # Base class for Dish, Order and Customer
     id_count = 0
 
     def __init__(self):

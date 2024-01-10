@@ -46,8 +46,8 @@ def test_edit_customer_name():
     :return:
     """
     customer_controller = CustomerController(CustomerRepository('customer.txt'))
-    customer_controller.edit_customer(9, "Changed", "Street")
-    assert customer_controller.find_by_id(9).name == 'Changed'
+    customer_controller.edit_customer(3, "Changed", "Street")
+    assert customer_controller.find_by_id(3).name == 'Changed'
 
 
 def test_convert_and_save():

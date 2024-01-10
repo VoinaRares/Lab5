@@ -95,3 +95,13 @@ class DataRepo:
         f.close()
         self.items = list(filter(lambda item: item.id != item_id, self.items))
         self.save()
+
+    def validate_id(self, proposed_id):
+        try:
+            proposed_id = int(proposed_id)
+        except ValueError:
+            return False
+        for item in self.items:
+            if item.id == proposed_id:
+                return True
+        return False

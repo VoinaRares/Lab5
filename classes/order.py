@@ -38,7 +38,10 @@ class Order(Identifier):
         :return:
         """
         dishes = self.__dishes_list()
-        self.price = functools.reduce(lambda a, b: float(a) + float(b), dishes)
+        try:
+            self.price = functools.reduce(lambda a, b: float(a) + float(b), dishes)
+        except TypeError:
+            self.price = 0
 
     def __create_receipt(self):
         """

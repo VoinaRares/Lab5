@@ -73,8 +73,13 @@ class Console:
         prints all the orders then deletes the order with the ID input by the user
         :return:
         """
-        print(self.view_orders())
-        order_id = int(input("Choose which order to delete by ID: "))
+        while True:
+            print(self.view_orders())
+            order_id = int(input("Choose which order to delete by ID: "))
+            if self.order_controller.validate_id(order_id):
+                break
+            else:
+                print("Invalid value")
         self.order_controller.delete_item(order_id)
 
     def crud_customer(self, opt):
@@ -113,7 +118,12 @@ class Console:
         :return:
         """
         self.find_customer()
-        customer_id = int(input("Choose the customer by ID: "))
+        while True:
+            customer_id = int(input("Choose the customer by ID: "))
+            if self.customer_controller.validate_id(customer_id):
+                break
+            else:
+                print("Invalid Value")
         customer = self.customer_controller.find_by_id(customer_id)
         while True:
             print("What do you want to edit?\n1-Name\n2-Address\n0-Stop")
@@ -134,7 +144,12 @@ class Console:
         :return:
         """
         self.find_customer()
-        customer_id = int(input("Choose the customer by ID: "))
+        while True:
+            customer_id = int(input("Choose the customer by ID: "))
+            if self.customer_controller.validate_id(customer_id):
+                break
+            else:
+                print("Invalid Value")
         self.customer_controller.delete_item(customer_id)
         self.order_controller.validate_customer_id(customer_id)
 
@@ -193,8 +208,13 @@ class Console:
         Edits the cooked Dishes
         :return:
         """
-        print(self.cooked_dish_controller.view_items())
-        cooked_dish_id = input("Choose the dish Id: ")
+        while True:
+            print(self.cooked_dish_controller.view_items())
+            cooked_dish_id = input("Choose the dish Id: ")
+            if self.cooked_dish_controller.validate_id(cooked_dish_id):
+                break
+            else:
+                print("Invalid Value")
         cooked_dish = self.cooked_dish_controller.find_by_id(cooked_dish_id)
         while True:
             print("What do you want to edit?\n1 - Portion Size\n2 - Price\n3 - Time Needed\n0 - Stop")
@@ -218,8 +238,13 @@ class Console:
         Edits the Beverages
         :return:
         """
-        print(self.beverage_controller.view_items())
-        beverage_id = input("Choose the beverage Id: ")
+        while True:
+            print(self.beverage_controller.view_items())
+            beverage_id = input("Choose the beverage Id: ")
+            if self.beverage_controller.validate_id(beverage_id):
+                break
+            else:
+                print("Invalid Value")
         beverage = self.beverage_controller.find_by_id(beverage_id)
         while True:
             print("What do you want to edit?\n1 - Portion Size\n2 - Price\n3 - Alcohol Percentage\n0 - Stop")
@@ -249,12 +274,24 @@ class Console:
         print(self.beverage_controller.view_items())
         print("What do you want to delete?\n1 - Cooked Dish\n2 - Beverage")
         delete_option = int(input("Choose the option: "))
-        dish_id = int(input("Choose the Dish by ID: "))
         if delete_option == 1:
+            while True:
+                dish_id = int(input("Choose the Dish by Id: "))
+                if self.cooked_dish_controller.validate_id(dish_id):
+                    break
+                else:
+                    print("Invalid Value")
             self.cooked_dish_controller.delete_item(dish_id)
+            self.order_controller.validate_dish_id(dish_id, delete_option)
         elif delete_option == 2:
+            while True:
+                dish_id = int(input("Choose the Dish by ID: "))
+                if self.beverage_controller.validate_id(dish_id):
+                    break
+                else:
+                    print("Invalid Value")
             self.beverage_controller.delete_item(dish_id)
-        self.order_controller.validate_dish_id(dish_id, delete_option)
+            self.order_controller.validate_dish_id(dish_id, delete_option)
 
     def crud_operations(self, class_option):
         """
@@ -270,8 +307,13 @@ class Console:
             self.crud_dishes(opt)
 
     def edit_order(self):
-        print(self.view_orders())
-        order_id = int(input("Choose which order to edit by ID: "))
+        while True:
+            print(self.view_orders())
+            order_id = int(input("Choose which order to edit by ID: "))
+            if self.order_controller.validate_id(order_id):
+                break
+            else:
+                print("Invalid Value")
         order = self.order_controller.find_by_id(order_id)
         while True:
             print("1 - Edit cooked dishes\n2 - Edit beverages\n3 - Edit customer\n0 - Stop")
@@ -302,9 +344,11 @@ class Console:
                 dish_id = int(input("Enter the Dish id: "))
                 if dish_id == -1:
                     break
-                else:
+                elif self.cooked_dish_controller.validate_id(dish_id):
                     dish_ids.append(dish_id)
                     print("Dish was added to the order")
+                else:
+                    print("Invalid Value")
             except ValueError:
                 print("Invalid Value")
         return dish_ids
@@ -318,9 +362,11 @@ class Console:
                 beverage_id = int(input("Enter the Beverage id: "))
                 if beverage_id == -1:
                     break
-                else:
+                elif self.beverage_controller.validate_id(beverage_id):
                     beverage_ids.append(beverage_id)  # Check if the id exists
                     print("Beverage was added to the order")
+                else:
+                    print("Invalid Value")
             except ValueError:
                 print("Invalid Value")
         return beverage_ids
@@ -345,7 +391,12 @@ class Console:
             customer_id = customer.id
         elif opt == 2:
             self.find_customer()
-            customer_id = input("Customer ID: ")
+            while True:
+                customer_id = input("Customer ID: ")
+                if self.customer_controller.validate_id(customer_id):
+                    break
+                else:
+                    print("Invalid Value")
         return customer_id
 
     def add_order_console(self):

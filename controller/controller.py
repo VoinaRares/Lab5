@@ -19,3 +19,6 @@ class Controller:
 
     def delete_item(self, item_id):
         self.repo.delete_item(item_id)
+
+    def validate_id(self, proposed_id):
+        return self.repo.validate_id(proposed_id)
